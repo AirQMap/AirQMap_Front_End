@@ -13,7 +13,7 @@
     <div id='myMap' style='width: 100vw; height: 100vh;'></div>
     <script type='text/javascript'>
         function loadMapScenario() {
-            var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {center: new Microsoft.Maps.Location(47.530098, 21.626017), zoom: 15 });
+            var map = new Microsoft.Maps.Map('#myMap', {center: new Microsoft.Maps.Location(47.530098, 21.626017), zoom: 15 });
             Microsoft.Maps.loadModule('Microsoft.Maps.DataBinning', async () => {
                 var pushpins = new Array();
                 await fetch('http://airqmap.divaldo.hu/sql.php').then(
@@ -29,7 +29,8 @@
                                         element.longtitude
                                     ),
                                     {
-                                        color: getColor(element.temperature)
+                                        color: getColor(element.temperature),
+                                        enableHoverStyle: true
                                     }
                                 )
                             );
@@ -40,10 +41,10 @@
                     pushpins,
                     {
                         dataBinType: Microsoft.Maps.DataBinType.circle,
-                        radius: 200,
+                        radius: 50,
                         distanceUnits: Microsoft.Maps.SpatialMath.DistanceUnits.Meters,
                         polygonOptions: {
-                            strokeColor: 'rgba(0, 0, 0, 0)'
+                            strokeColor: getColor(50)
                         }
                     }
                 );
@@ -52,18 +53,30 @@
                 map.layers.insert(layer);
             });
         }
+
+        // -20 <-> 50
         function getColor(data) {
-            var r, g, b;
-            if(data > 0) {
-                r = data * 6.375;
-                g = 255 - data * 6.375;
-                b = 0;
-            } else if(data < 0) {
-                r = 0;
-                g = 255 - data * 6.375;
-                b = data * 6.375;
-            }
-            return `rgba(${r},${g},${b},255)`;
+            data+=20;
+
+            var r = data > 52.5 ? 
+                255 : 
+                (data > 35 ? 
+                    (data - 35) * 14.5714 :
+                    0);
+
+            var g = data > 52.5 ?
+                Math.abs(data - 70) * 14.5714 :
+                data < 17.5 ?
+                    data * 14.5714 :
+                    255;
+
+            var b = data < 17.5 ?
+                255 :
+                (data < 35 ?
+                    Math.abs(data - 35) * 14.5714 :
+                    0);
+            
+            return new Microsoft.Maps.Color(1, r, g, b);
         }
     </script>
 </body>

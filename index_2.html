@@ -2,24 +2,25 @@
 <html>
 <head>
     <title>AirQMap</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
-    <style type='text/css'>body{margin:0;padding:0;overflow:hidden;font-family:'Segoe UI',Helvetica,Arial,Sans-Serif}</style>
-    <script type="application/javascript" src="http://www.bing.com/api/maps/mapcontrol?key=ArSyAqCFpDbMrF8monFxY9PomZbiBHLhUJ3sFFZeNBLI_b8Rr3J0TUDHSAjkc3AG&callback=loadMapScenario" async defer></script>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <style type='text/css'>
+    body{margin:0;padding:0;overflow:hidden;font-family:'Segoe UI',Helvetica,Arial,Sans-Serif}
+    </style>
+    <script async defer src="http://www.bing.com/api/maps/mapcontrol?key=ArSyAqCFpDbMrF8monFxY9PomZbiBHLhUJ3sFFZeNBLI_b8Rr3J0TUDHSAjkc3AG&callback=loadMapScenario" type="application/javascript">
+    </script>
 </head>
-    <body>
-		<div id='myMap' style='width: 100vw; height: 100vh;'></div>
-		
-        <script type='text/javascript'>			
+<body>
+    <div id='myMap' style='width: 100vw; height: 100vh;'></div>
+    <script type='text/javascript'>
         async function loadMapScenario() {
-			var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {center: new Microsoft.Maps.Location(47.530098, 21.626017), zoom: 15 });
-			
-			Microsoft.Maps.loadModule('Microsoft.Maps.DataBinning', () => {
+            var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {center: new Microsoft.Maps.Location(47.530098, 21.626017), zoom: 15 });
+            Microsoft.Maps.loadModule('Microsoft.Maps.DataBinning', () => {
                 var pushpins = new Array();
                 await fetch('http://airqmap.divaldo.hu/sql.php').then(
                     resp => (resp.json())
                 ).then(
                     resp => {
-                        var locations = [];	
+                        var locations = []; 
                         resp.forEach(element => {
                             pushpins.push(
                                 new Microsoft.Maps.Pushpin(
@@ -48,21 +49,21 @@
                 );
                 console.log('1');
                 map.layers.insert(layer);
-			});
-		}
-		function getColor(data)	{
-			var r, g, b;
-			if(data > 0) {
-				r = data * 6.375;
-				g = 255 - data * 6.375;
-				b = 0;
-			} else if(data < 0)	{
-				r = 0;
-				g = 255 - data * 6.375;
-				b = data * 6.375;
-			}
-		    return `rgba(${r},${g},${b},255)`;
-		}
+            });
+        }
+        function getColor(data) {
+            var r, g, b;
+            if(data > 0) {
+                r = data * 6.375;
+                g = 255 - data * 6.375;
+                b = 0;
+            } else if(data < 0) {
+                r = 0;
+                g = 255 - data * 6.375;
+                b = data * 6.375;
+            }
+            return `rgba(${r},${g},${b},255)`;
+        }
     </script>
 </body>
 </html>

@@ -40,14 +40,15 @@
                     pushpins,
                     {
                         dataBinType: Microsoft.Maps.DataBinType.circle,
-                        radius: 3,
+                        radius: 200,
                         distanceUnits: Microsoft.Maps.SpatialMath.DistanceUnits.Meters,
                         polygonOptions: {
                             strokeColor: 'rgba(0, 0, 0, 0)'
                         }
                     }
                 );
-                console.log('1');
+                console.log('LAYER');
+                
                 map.layers.insert(layer);
             });
         }
